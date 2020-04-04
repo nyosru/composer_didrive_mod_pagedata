@@ -1,0 +1,59 @@
+{strip}
+<div class="container-fluid">
+    <div class="grid">
+
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-center">
+                
+                
+                <form action="" method="post" enctype="multipart/form-data" style="width: 150px;" >
+                    <br/>
+                    <input type="file" name="data" />
+                    <br/>
+                    <input type="submit" name="save" value="Загрузить" class="btn btn-success"/>
+                </form>
+                
+                <Br/>
+                <Br/>
+                
+                {* /ajax.php?level=070.info_balance&action=scan_new_file *}
+                
+                {$ee = "/0.site/exe/page.data/1/ajax.php?"}
+                {$e1['action'] = 'scan_new_file'}
+                {$e1['level'] = $now_mod['cfg.level']}
+                {*$e1['id'] = $now_mod['cfg.level']}
+                {$e1['s'] = Nyos\nyos::creatSecret($now_mod['cfg.level'])*}
+                
+                <A href="{$ee}{http_build_query($e1)}" class='btn btn-success' target='_blank'>обновить данные из файла данных</a>
+                
+                {*f\pa($now_mod)*}
+                
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-center">
+
+<br/>
+<br/>
+                
+                {if isset($d_file.time)}
+                Файл данных обновлён: {$d_file.time}
+                {/if}
+                
+                {*
+                <textarea name="editor" id="editor1" rows="10" style="max-width: 100%" >
+                    {$html}
+                </textarea>
+                <br/>
+                <br/>
+                <input type="submit" name="save" value="Сохранить" class="btn btn-success"/>
+                <br/>
+                <br/>
+                *}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{/strip}

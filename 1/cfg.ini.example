@@ -1,0 +1,25 @@
+
+type=page.data
+version=1
+
+in-menu-2=da
+xin-menu-1=da
+name=Сделки
+title=Требы
+
+;тип файла данных, нужно для обработки
+datain_name_file_type=csv
+;имя файла данных
+datain_name_file=IMKontr.csv
+;удалить файл данных после обработки
+datain_name_file_no_delete_after_parsing=da
+
+yadisc_login=vslava@yandex.ru
+yadisc_pass=123123Vv
+send_to_mail=buh_vv@mail.ru,mpo_edinenie@bk.ru
+
+
+send_vk_api = send
+vk_api_token = 2
+vk_api_send_to_id = 296088567
+vk_api_send_to_id2 = 5903492
