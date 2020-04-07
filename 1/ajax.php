@@ -51,6 +51,7 @@ if (( isset($get['action']) && $get['action'] == 'scan_new_file' ) || (isset($_G
 //                    f\pa($v1);
 //                    f\pa($amnu[$_GET['level']] );
 //                    die();
+
                     require_once './../class.php';
 
                     Nyos\mod\PageData::parseFile(

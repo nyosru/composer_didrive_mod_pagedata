@@ -13,6 +13,108 @@ class PageData {
 
     public static $skip_polya = array();
 
+    public static function readDataFile(string $link_file_data, $type = null) {
+
+        //echo '<br/>' . __FILE__ . ' #' . __LINE__;
+        //echo $type;
+
+        if (!file_exists($link_file_data)) {
+            throw new \Exe('Файл данных не обнаружен ' . $link_file_data);
+        }
+
+        if ($type === null || $type == '1c_win1251' || $type == 'csv') {
+
+            $handle = @fopen($link_file_data, "r");
+            $t_head = null;
+
+            $datas = array(
+                // массив для заголовков
+                'heads' => [],
+                // массив для заголовков транслит
+                'ht' => [],
+                // массив для данных
+                'data' => []
+            );
+
+            if ($handle) {
+
+                $parsing_start = false;
+                if ($type == 'csv') {
+                    $parsing_start = true;
+                }
+
+
+                while (( $stroka = fgets($handle, 4096)) !== false) {
+
+                    //echo '<br/>'.$stroka;
+
+                    /**
+                     * запускаем старт парсинга
+                     */
+                    if ($parsing_start === false && ( trim($stroka) == '@@@=' || $type == 'csv' )) {
+                        $parsing_start = true;
+                        continue;
+                    }
+
+                    /**
+                     * обрабатываем данные если есть заголовки
+                     */
+                    if ($parsing_start === true) {
+
+//                    if( $type == 'csv' ){
+//                    $vars = explode(';', $stroka );
+//                    }else{
+                        $vars = explode(';', iconv('windows-1251', 'UTF-8', $stroka));
+//                    }
+
+                        /**
+                         * Получаем заголовки - 1ая строка после старта парсинга
+                         */
+                        if ($t_head === null) {
+                            $t_head = true;
+
+                            foreach ($vars as $k => $v) {
+                                $v = trim($v);
+                                if (!empty($v)) {
+                                    $datas['heads'][$k] = $v;
+                                    $datas['ht'][\f\translit($v, 'uri2')] = $k;
+                                }
+                            }
+                            // \f\pa($heads);
+
+                            continue;
+                        }
+                        /**
+                         * обработка данных после старта и получения заголовков
+                         */ else {
+
+                            $r = [];
+
+                            foreach ($vars as $k => $v) {
+                                if (isset($datas['heads'][$k])) {
+                                    $r[] = trim($v);
+                                }
+                            }
+
+                            $datas['data'][] = $r;
+                        }
+                    }
+                }
+
+                // \f\pa($datas);
+
+                if (!feof($handle))
+                    throw new \NyosEx('Ошибка чтения файла ' . $file_data);
+
+                fclose($handle);
+
+                return $datas;
+            }
+        }
+
+        return array('data' => $t_all, 'dop' => $t_all_dop);
+    }
+
     /*
       function putKeyArray($key, $data) {
 
@@ -34,18 +136,11 @@ class PageData {
       }
      */
 
-    
-    
-    public static function readFile($file){
-        
+    public static function readFile($file) {
+
         \f\pa(\Nyos\Nyos::$folder_now);
-        
-        
     }
-    
-    
-    
-    
+
     /**
      * обработка файла данных
      * @global string $status
@@ -134,7 +229,7 @@ class PageData {
         }
 
         //elseif ($type == '1c_win1251') {
-        else{
+        else {
 
             $t_head = null;
             $t_all = array();
@@ -188,11 +283,12 @@ class PageData {
                 rename($file, $file . '.delete');
         }
 
-        //\f\pa($t_all);
-        //\f\pa($t_all);
+        // \f\pa($t_all);
+        // \f\pa($t_all, 2);
 
-        file_put_contents($_SERVER['DOCUMENT_ROOT'] . DS . '9.site' . DS . $folder . DS . 'module' . DS . $module . DS . 'data.s.ar', serialize($t_all));
+        file_put_contents( DR . dir_site_module . DS . $module . DS . 'data.json.ar', json_encode( $t_all ) );
 
+        // file_put_contents( $_SERVER['DOCUMENT_ROOT'] . DS . '9.site' . DS . $folder . DS . 'module' . DS . $module . DS . 'data.s.ar', serialize($t_all) );
         // $vv['warn'] .= ( isset($vv['warn']{5}) ? '<br/>' : '' ) . );
 
         if (2 == 2) {
@@ -249,7 +345,8 @@ class PageData {
           }
          */
         foreach ($key as $k1 => $v1) {
-            $w[$v1] = isset($data[$k1]{0}) ? $data[$k1] : '';
+            if (!empty($v1))
+                $w[$v1] = isset($data[$k1]{0}) ? $data[$k1] : '';
             //echo '<Br/>'.$k1.' - '.$v1;
         }
 
