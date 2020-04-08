@@ -18,23 +18,31 @@ if (!isset($inf_start_pagedata)) {
         // \f\pa($w1);
 //        echo '<br/>'.( $w1['cfg.level'] ?? 'x' );
 //        echo '<br/>'.( $w1['datain_name_file'] ?? 'x' );
-        
+
+        if ( isset($w1['type']) && $w1['type'] == 'pagedata' && isset($w1['version']) && $w1['version'] == 1 ) {
+            
+        } else {
+            continue;
+        }
+
+//        type = pagedata
+//        version = 1
+
         if (isset($w1['datain_name_file']) && file_exists(DR . dir_site_sd . 'datain' . DS . $w1['datain_name_file'])) {
 
             // echo '<br/>'.DR . dir_site_sd . 'datain' . DS . $w1['datain_name_file'];
             // echo '<br/>' . __LINE__;
 
             $ee = \Nyos\mod\PageData::parseFile(
-                    DR . dir_site_sd . 'datain' . DS . $w1['datain_name_file']
-                    , 
-                    \Nyos\Nyos::$folder_now
-                    ,
-                    $w1['cfg.level']
-                    ,
-                    ( $w1['datain_name_file_type'] ?? null)
-                    );
+                            DR . dir_site_sd . 'datain' . DS . $w1['datain_name_file']
+                            ,
+                            \Nyos\Nyos::$folder_now
+                            ,
+                            $w1['cfg.level']
+                            ,
+                            ( $w1['datain_name_file_type'] ?? null)
+            );
             \f\pa($ee);
-
         }
     }
 }
