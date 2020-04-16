@@ -29,23 +29,32 @@ if (1 == 2) {
 
 // echo dir_site_module_nowlev;
 // echo 
-$file_data = DR . dir_site_module_nowlev . 'data.json.ar';
 
-if (file_exists($file_data)) {
+for ($i = 0; $i <= 5; $i++) {
+
+    $nn = ( $i == 0 ? '' : $i );
     
-    // echo '<br/>'.__LINE__;
-    $vv['datain'] = json_decode(file_get_contents($file_data), true);
-    $vv['datain_time'] = filemtime($file_data);
-    // \f\pa($vv['datain']);
-    
-} else {
-    
-    // echo '<br/>'.__LINE__;
-    $vv['datain'] = [ 'x' => 'x' ];
-    $vv['datain_time'] = 'x';
-    
-}
+    $file_data = DR . dir_site_module_nowlev . 'data'.$nn.'.json.ar';
+
+    if (file_exists($file_data)) {
+
+        // echo '<br/>'.__LINE__;
+        $vv['datain'.$nn] = json_decode(file_get_contents($file_data), true);
+        $vv['datain_time'.$nn] = filemtime($file_data);
+        // \f\pa($vv['datain']);
+
+    } 
+//    else {
+//        // echo '<br/>'.__LINE__;
+//        $vv['datain'.$nn] = ['x' => 'x'];
+//        $vv['datain_time'.$nn] = 'x';
+//    }
 
 // \f\pa($vv['datain']);
+
+}
+
+//if( !file_exists(DR.dir_site_module_nowlev_tpl . 'body.base.htm') )
+//        throw new \Exception('123');
 
 $vv['tpl_body'] = dir_site_module_nowlev_tpl . 'body.base.htm';

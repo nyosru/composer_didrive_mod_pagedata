@@ -154,10 +154,13 @@ class PageData {
      * (по умолчанию true) сохраняем дата файл как старый если true
      * @return type
      */
-    public static function parseFile($file, $folder, $module, $type = null, $save_old_file = true) {
+    public static function parseFile($file, $module, $type = null, $save_old_file = true, $nn = null, $folder = null) {
 
-        //echo 'public static function parseFile('.$file.', '.$folder.', '.$module.', '.$type.' = null, '.$save_old_file.' = true ) {';
+//        echo '<br/><br/>public static function parseFile(' . $file . ', ' . $folder . ', ' . $module . ', ' . $type . ' = null, ' . $save_old_file . ' = true ) {';
         // $show_status = true;
+
+        if ($folder === null)
+            $folder = \Nyos\Nyos::$folder_now;
 
         if (1 == 1) {
 
@@ -173,6 +176,8 @@ class PageData {
             }
         }
 
+//        echo '<br/>'.$type;
+        
         if (file_exists($file)) {
             
         } else {
@@ -183,7 +188,7 @@ class PageData {
             return \f\end2('Ошибка в указании ссылки на файл', false, array(), 'array');
         }
 
-        if ($type == 'win1251') {
+        if ($type == 'win1251' || $type == 'csv' ) {
 
             $t_head = null;
             $t_all = array();
@@ -286,7 +291,7 @@ class PageData {
         // \f\pa($t_all);
         // \f\pa($t_all, 2);
 
-        file_put_contents( DR . dir_site_module . DS . $module . DS . 'data.json.ar', json_encode( $t_all ) );
+        file_put_contents(DR . dir_site_module . DS . $module . DS . 'data' . ( $nn ?? '' ) . '.json.ar', json_encode($t_all));
 
         // file_put_contents( $_SERVER['DOCUMENT_ROOT'] . DS . '9.site' . DS . $folder . DS . 'module' . DS . $module . DS . 'data.s.ar', serialize($t_all) );
         // $vv['warn'] .= ( isset($vv['warn']{5}) ? '<br/>' : '' ) . );
